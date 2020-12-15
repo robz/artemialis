@@ -1,4 +1,4 @@
-
+import math
 from music21 import midi
 
 
@@ -45,7 +45,7 @@ NUM_CHANNELS = len(idx_to_event)
 def midiToIdxs(mf):
   ticks_per_beat = mf.ticksPerQuarterNote
   # The maestro dataset uses the first track to store tempo data
-  tempo_data = next(e for e in mf.tracks[0].events if e.type == 'SET_TEMPO').data
+  tempo_data = next(e for e in mf.tracks[0].events if e.type == midi.MetaEvents.SET_TEMPO).data
   # tempo data is stored at microseconds per beat (beat = quarter note)
   microsecs_per_beat = int.from_bytes(tempo_data, 'big')
   millis_per_tick = microsecs_per_beat / ticks_per_beat / 1e3
@@ -78,7 +78,7 @@ def midiToIdxs(mf):
         t -= t_chunk
       previous_t = t_chunk
 
-    elif e.type == 'NOTE_ON':
+    elif e.type == midi.ChannelVoiceMessages.NOTE_ON:
       if e.velocity == 0:
         if is_pedal_down:
           notes_to_turn_off.add(e.pitch)
@@ -96,7 +96,7 @@ def midiToIdxs(mf):
         started = True
         previous_t = None
 
-    elif e.type == 'CONTROLLER_CHANGE' and e.parameter1 == 64: # sustain pedal
+    elif e.type == midi.ChannelVoiceMessages.CONTROLLER_CHANGE and e.parameter1 == 64: # sustain pedal
       # pedal values greater than 64 mean the pedal is being held down,
       # otherwise it's up
       if is_pedal_down and e.parameter2 < 64:
@@ -112,6 +112,13 @@ def midiToIdxs(mf):
   return idxs
 
 
+def makeNote(track, pitch, velocity):
+  e = midi.MidiEvent(track, type=midi.ChannelVoiceMessages.NOTE_ON, channel=1)
+  e.pitch = int(pitch)
+  e.velocity = int(velocity)
+  return e
+
+
 def idxsToMidi(idxs, verbose=False):
   mf = midi.MidiFile()
   mf.ticksPerQuarterNote = 1024
@@ -122,13 +129,13 @@ def idxsToMidi(idxs, verbose=False):
   track = midi.MidiTrack(1)
   mf.tracks = [tempo_track, track]
 
-  tempo = midi.MidiEvent(tempo_track, type='SET_TEMPO')
+  tempo = midi.MidiEvent(tempo_track, type=midi.MetaEvents.SET_TEMPO)
   # temp.data is the number of microseconds per beat (per quarter note)
   # So to set ticks per millis = 1 (easy translation from time-shift values to ticks),
   # tempo.data must be 1e3 * 1024, since ticksPerQuarterNote is 1024 (see above)
   tempo.data = int(1e3 * 1024).to_bytes(3, 'big')
 
-  end_of_track = midi.MidiEvent(tempo_track, type='END_OF_TRACK')
+  end_of_track = midi.MidiEvent(tempo_track, type=midi.MetaEvents.END_OF_TRACK)
   end_of_track.data = ''
   tempo_track.events = [
     # there must always be a delta time before each event
@@ -140,12 +147,10 @@ def idxsToMidi(idxs, verbose=False):
 
   track.events = [midi.DeltaTime(track, time=0)]
 
-  current_velocity = None
+  
+  current_velocity = 0
   notes_on = set()
-  errors = {
-    'pitch_is_on': 0,
-    'pitch_is_not_on': 0,
-  }
+  errors = {'is_on': 0, 'is_not_on': 0}
 
   for idx in idxs:
     if 0 <= idx < 128: # note-on
@@ -153,14 +158,11 @@ def idxsToMidi(idxs, verbose=False):
       if pitch in notes_on:
         if verbose:
           print(pitch, 'is already on')
-        errors['pitch_is_on'] += 1
+        errors['is_on'] += 1
         continue
       if track.events[-1].type != 'DeltaTime':
         track.events.append(midi.DeltaTime(track, time=0))
-      e = midi.MidiEvent(track, type='NOTE_ON', channel=1)
-      e.pitch = pitch
-      e.velocity = current_velocity
-      track.events.append(e)
+      track.events.append(makeNote(track, pitch, current_velocity))
       notes_on.add(pitch)
 
     elif 128 <= idx < (128 + 128): # note-off
@@ -168,14 +170,11 @@ def idxsToMidi(idxs, verbose=False):
       if pitch not in notes_on:
         if verbose:
           print(pitch, 'is not on')
-        errors['pitch_is_not_on'] += 1
+        errors['is_not_on'] += 1
         continue
       if track.events[-1].type != 'DeltaTime':
         track.events.append(midi.DeltaTime(track, time=0))
-      e = midi.MidiEvent(track, type='NOTE_ON', channel=1)
-      e.pitch = pitch
-      e.velocity = 0
-      track.events.append(e)
+      track.events.append(makeNote(track, pitch, 1))
       notes_on.remove(pitch)
 
     elif (128 + 128) <= idx < (128 + 128 + 100): # time-shift
@@ -194,9 +193,6 @@ def idxsToMidi(idxs, verbose=False):
 
   if track.events[-1].type != 'DeltaTime':
     track.events.append(midi.DeltaTime(track, time=0))
-
-  e = midi.MidiEvent(track, type='END_OF_TRACK')
-  e.data = ''
-  track.events.append(e)
+  track.events.append(end_of_track)
 
   return mf, errors

@@ -1,11 +1,13 @@
 import torch
 from torch.utils.tensorboard import SummaryWriter
-import os, re
+import os, re, platform
 
 from MidiIndexUtils import writeMidi, idxsToMidi
 from GPUUsageUtils import printm
 
+DEFAULT_MODEL_DIR = 'models' if platform.system() == 'Linux' else 'Documents/PerformanceMidi/models'
 
+DEFAULT_RUNS_DIR = '../runs' if platform.system() == 'Linux' else 'runs'
 
 class EpochWriter:
   def __init__(self,
@@ -13,7 +15,7 @@ class EpochWriter:
     name_prefix,
     get_seq_for_errors,
     iteration=0,
-    model_dir='Documents/PerformanceMidi/models'
+    model_dir=DEFAULT_MODEL_DIR
   ):
     self.model = model
     self.name_prefix = name_prefix
@@ -22,7 +24,7 @@ class EpochWriter:
     
     self.epoch = 0
     self.name = F'{self.name_prefix}-iter{iteration}'
-    self.writer = SummaryWriter('runs/' + self.name)
+    self.writer = SummaryWriter(DEFAULT_RUNS_DIR + '/' + self.name)
 
   def to_tup(self, filename):
     search = re.search(F'{self.name_prefix}-iter([0-9]+)-([0-9]+).pt', filename)
@@ -42,7 +44,7 @@ class EpochWriter:
     self.epoch = 1 + int(epoch)
     iteration = iteration if iteration_override is None else iteration_override
     self.name = F'{self.name_prefix}-iter{iteration}'
-    self.writer = SummaryWriter('runs/' + self.name)
+    self.writer = SummaryWriter(DEFAULT_RUNS_DIR + '/' + self.name)
 
   def get_model(self, iteration, epoch):
     self.model.load_state_dict(torch.load(

@@ -1,6 +1,7 @@
 
 import torch
-import time
+import time, math
+import sys
 
 
 ####################################################################
@@ -18,6 +19,7 @@ def train(
   loss_cb=None,
   epoch_loss_cb=None
 ):
+  print('hi?')
   optimizer = torch.optim.Adam(params=model.parameters(), lr=lr)
   lossfn = torch.nn.CrossEntropyLoss()
 
@@ -36,10 +38,12 @@ def train(
         print(F'{phase}: ', end='')  
 
         dataloader = dataloaders[phase]
-        epoch_losses = torch.zeros(len(dataloader.dataset) // dataloader.batch_size + 1).to('cuda')
+        num_batches = int(math.ceil(len(dataloader.dataset) / dataloader.batch_size))
+        epoch_losses = torch.zeros(num_batches).to('cuda')
         for i, sample_batched in enumerate(dataloader):
           x = sample_batched['input']
           y = sample_batched['output']
+          print('.', end='')
           ypred = model(x)
           print('.', end='')
           loss = lossfn(ypred, y[:, -ypred.shape[2]:])
@@ -64,6 +68,7 @@ def train(
             loss_cb(phase, loss)
 
           print(F'{i}', end='')
+          sys.stdout.flush()
 
         print()
           

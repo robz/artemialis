@@ -1,11 +1,12 @@
-import random
+import random, time, os
 import pandas as pd
 import torch
+import platform
 
 from GPUUsageUtils import printm
-from MidiIndexUtils import NUM_CHANNELS, readMidi
+from MidiIndexUtils import NUM_CHANNELS, readMidi, midiToIdxs
 
-MAESTRO_DIRECTORY = 'Music/maestro-v2.0.0'
+MAESTRO_DIRECTORY = 'maestro-v2.0.0' if platform.system() == 'Linux' else 'Music/maestro-v2.0.0'
 
 ####################################################################
 # Dataset class, dataloader, data augmentation
@@ -98,3 +99,7 @@ def preprocessAndSaveToDisk():
     start = time.time()
     dataset.preprocessAndSaveToDisk()
     print('delta time:', time.time() - start)
+
+
+if __name__ == "__main__":
+  preprocessAndSaveToDisk()
