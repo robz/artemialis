@@ -1,0 +1,318 @@
+Traceback (most recent call last):
+  File "Documents\PerformanceMidi\performanceRNN.py", line 495, in <module>
+    train_and_show(lstm, num_epochs=300, loss_cb=write_data, epoch_loss_cb=write_data_epoch)
+  File "Documents\PerformanceMidi\performanceRNN.py", line 434, in train_and_show
+    train_losses, test_losses = train(
+  File "Documents\PerformanceMidi\performanceRNN.py", line 398, in train
+    loss_item = loss.item()
+RuntimeError: CUDA error: unspecified launch failure
+
+
+Traceback (most recent call last):
+  File "Documents\PerformanceMidi\performanceRNN.py", line 495, in <module>
+    train_and_show(lstm, num_epochs=300, loss_cb=write_data, epoch_loss_cb=write_data_epoch)
+  File "Documents\PerformanceMidi\performanceRNN.py", line 434, in train_and_show
+    train_losses, test_losses = train(
+  File "Documents\PerformanceMidi\performanceRNN.py", line 398, in train
+    loss_item = loss.item()
+RuntimeError: CUDA error: unspecified launch failure
+
+
+Traceback (most recent call last):
+  File "Documents\PerformanceMidi\performanceRNN.py", line 495, in <module>
+    train_and_show(lstm, num_epochs=300, loss_cb=write_data, epoch_loss_cb=write_data_epoch)
+  File "Documents\PerformanceMidi\performanceRNN.py", line 434, in train_and_show
+    train_losses, test_losses = train(
+  File "Documents\PerformanceMidi\performanceRNN.py", line 402, in train
+    loss.backward()
+  File "C:\ProgramData\Miniconda3\lib\site-packages\torch\tensor.py", line 185, in backward
+    torch.autograd.backward(self, gradient, retain_graph, create_graph)
+  File "C:\ProgramData\Miniconda3\lib\site-packages\torch\autograd\__init__.py", line 125, in backward
+    Variable._execution_engine.run_backward(
+RuntimeError: cuDNN error: CUDNN_STATUS_INTERNAL_ERROR
+Exception raised from _cudnn_rnn_backward_weight at ..\aten\src\ATen\native\cudnn\RNN.cpp:1020 (most recent call first):
+00007FF8F1EE75A200007FF8F1EE7540 c10.dll!c10::Error::Error [<unknown file> @ <unknown line number>]
+00007FF8BFC44F3600007FF8BFC44E80 torch_cuda.dll!at::native::Descriptor<cudnnRNNStruct,&cudnnCreateRNNDescriptor,&cudnnDestroyRNNDescriptor>::Descriptor<cudnnRNNStruct,&cudnnCreateRNNDescriptor,&cudnnDestroyRNNDescriptor> [<unknown file> @ <unknown line number>]
+00007FF8BFC5D5A800007FF8BFC59770 torch_cuda.dll!at::native::_cudnn_rnn_backward [<unknown file> @ <unknown line number>]
+00007FF8BFC59DF500007FF8BFC59770 torch_cuda.dll!at::native::_cudnn_rnn_backward [<unknown file> @ <unknown line number>]
+00007FF8BFCB284800007FF8BFC6E0A0 torch_cuda.dll!at::native::set_storage_cuda_ [<unknown file> @ <unknown line number>]
+00007FF8BFCC107D00007FF8BFC6E0A0 torch_cuda.dll!at::native::set_storage_cuda_ [<unknown file> @ <unknown line number>]
+00007FF8E747BBF100007FF8E73ED9D0 torch_cpu.dll!at::native::mkldnn_sigmoid_ [<unknown file> @ <unknown line number>]
+00007FF8E74CB9DA00007FF8E74C8FA0 torch_cpu.dll!at::bucketize_out [<unknown file> @ <unknown line number>]
+00007FF8E74B2ECA00007FF8E74B2D40 torch_cpu.dll!at::_cudnn_rnn_backward [<unknown file> @ <unknown line number>]
+00007FF8E87B088900007FF8E876E010 torch_cpu.dll!torch::autograd::GraphRoot::apply [<unknown file> @ <unknown line number>]
+00007FF8E87BD12D00007FF8E876E010 torch_cpu.dll!torch::autograd::GraphRoot::apply [<unknown file> @ <unknown line number>]
+00007FF8E747BBF100007FF8E73ED9D0 torch_cpu.dll!at::native::mkldnn_sigmoid_ [<unknown file> @ <unknown line number>]
+00007FF8E74CB9DA00007FF8E74C8FA0 torch_cpu.dll!at::bucketize_out [<unknown file> @ <unknown line number>]
+00007FF8E74B2ECA00007FF8E74B2D40 torch_cpu.dll!at::_cudnn_rnn_backward [<unknown file> @ <unknown line number>]
+00007FF8E86BC12D00007FF8E86BBAF0 torch_cpu.dll!torch::autograd::generated::CudnnRnnBackward::apply [<unknown file> @ <unknown line number>]
+00007FF8E86A7E9100007FF8E86A7B50 torch_cpu.dll!torch::autograd::Node::operator() [<unknown file> @ <unknown line number>]
+00007FF8E8C0F9BA00007FF8E8C0F300 torch_cpu.dll!torch::autograd::Engine::add_thread_pool_task [<unknown file> @ <unknown line number>]
+00007FF8E8C103AD00007FF8E8C0FFD0 torch_cpu.dll!torch::autograd::Engine::evaluate_function [<unknown file> @ <unknown line number>]
+00007FF8E8C14FE200007FF8E8C14CA0 torch_cpu.dll!torch::autograd::Engine::thread_main [<unknown file> @ <unknown line number>]
+00007FF8E8C14C4100007FF8E8C14BC0 torch_cpu.dll!torch::autograd::Engine::thread_init [<unknown file> @ <unknown line number>]
+00007FF88B0908F700007FF88B069F80 torch_python.dll!THPShortStorage_New [<unknown file> @ <unknown line number>]
+00007FF8E8C0BF1400007FF8E8C0B780 torch_cpu.dll!torch::autograd::Engine::get_base_engine [<unknown file> @ <unknown line number>]
+00007FF9276B10B200007FF9276B0F70 ucrtbase.dll!beginthreadex [<unknown file> @ <unknown line number>]
+00007FF928E27C2400007FF928E27C10 KERNEL32.DLL!BaseThreadInitThunk [<unknown file> @ <unknown line number>]
+00007FF929A4D4D100007FF929A4D4B0 ntdll.dll!RtlUserThreadStart [<unknown file> @ <unknown line number>]
+
+
+Traceback (most recent call last):
+  File "Documents\PerformanceMidi\performanceRNN.py", line 495, in <module>
+    train_and_show(lstm, num_epochs=300, loss_cb=write_data, epoch_loss_cb=write_data_epoch)
+  File "Documents\PerformanceMidi\performanceRNN.py", line 434, in train_and_show
+    train_losses, test_losses = train(
+  File "Documents\PerformanceMidi\performanceRNN.py", line 398, in train
+    loss_item = loss.item()
+RuntimeError: CUDA error: unspecified launch failure
+
+
+
+
+
+Traceback (most recent call last):
+  File "Documents\PerformanceMidi\performanceRNN.py", line 554, in <module>
+    train_and_show(lstm, num_epochs=500, max_data_len=2048, epoch_loss_cb=write_data_epoch)
+  File "Documents\PerformanceMidi\performanceRNN.py", line 499, in train_and_show
+    train_losses, test_losses = train(
+  File "Documents\PerformanceMidi\performanceRNN.py", line 455, in train
+    loss.backward()
+  File "C:\ProgramData\Miniconda3\lib\site-packages\torch\tensor.py", line 185, in backward
+    torch.autograd.backward(self, gradient, retain_graph, create_graph)
+  File "C:\ProgramData\Miniconda3\lib\site-packages\torch\autograd\__init__.py", line 125, in backward
+    Variable._execution_engine.run_backward(
+RuntimeError: cuDNN error: CUDNN_STATUS_EXECUTION_FAILED
+Exception raised from _cudnn_rnn_backward_input at ..\aten\src\ATen\native\cudnn\RNN.cpp:923 (most recent call first):
+00007FF8FE0775A200007FF8FE077540 c10.dll!c10::Error::Error [<unknown file> @ <unknown line number>]
+00007FF8BC4F4F3600007FF8BC4F4E80 torch_cuda.dll!at::native::Descriptor<cudnnRNNStruct,&cudnnCreateRNNDescriptor,&cudnnDestroyRNNDescriptor>::Descriptor<cudnnRNNStruct,&cudnnCreateRNNDescriptor,&cudnnDestroyRNNDescriptor> [<unknown file> @ <unknown line number>]
+00007FF8BC50BDBB00007FF8BC509770 torch_cuda.dll!at::native::_cudnn_rnn_backward [<unknown file> @ <unknown line number>]
+00007FF8BC509CD000007FF8BC509770 torch_cuda.dll!at::native::_cudnn_rnn_backward [<unknown file> @ <unknown line number>]
+00007FF8BC56284800007FF8BC51E0A0 torch_cuda.dll!at::native::set_storage_cuda_ [<unknown file> @ <unknown line number>]
+00007FF8BC57107D00007FF8BC51E0A0 torch_cuda.dll!at::native::set_storage_cuda_ [<unknown file> @ <unknown line number>]
+00007FF8B45EBBF100007FF8B455D9D0 torch_cpu.dll!at::native::mkldnn_sigmoid_ [<unknown file> @ <unknown line number>]
+00007FF8B463B9DA00007FF8B4638FA0 torch_cpu.dll!at::bucketize_out [<unknown file> @ <unknown line number>]
+00007FF8B4622ECA00007FF8B4622D40 torch_cpu.dll!at::_cudnn_rnn_backward [<unknown file> @ <unknown line number>]
+00007FF8B592088900007FF8B58DE010 torch_cpu.dll!torch::autograd::GraphRoot::apply [<unknown file> @ <unknown line number>]
+00007FF8B592D12D00007FF8B58DE010 torch_cpu.dll!torch::autograd::GraphRoot::apply [<unknown file> @ <unknown line number>]
+00007FF8B45EBBF100007FF8B455D9D0 torch_cpu.dll!at::native::mkldnn_sigmoid_ [<unknown file> @ <unknown line number>]
+00007FF8B463B9DA00007FF8B4638FA0 torch_cpu.dll!at::bucketize_out [<unknown file> @ <unknown line number>]
+00007FF8B4622ECA00007FF8B4622D40 torch_cpu.dll!at::_cudnn_rnn_backward [<unknown file> @ <unknown line number>]
+00007FF8B582C12D00007FF8B582BAF0 torch_cpu.dll!torch::autograd::generated::CudnnRnnBackward::apply [<unknown file> @ <unknown line number>]
+00007FF8B5817E9100007FF8B5817B50 torch_cpu.dll!torch::autograd::Node::operator() [<unknown file> @ <unknown line number>]
+00007FF8B5D7F9BA00007FF8B5D7F300 torch_cpu.dll!torch::autograd::Engine::add_thread_pool_task [<unknown file> @ <unknown line number>]
+00007FF8B5D803AD00007FF8B5D7FFD0 torch_cpu.dll!torch::autograd::Engine::evaluate_function [<unknown file> @ <unknown line number>]
+00007FF8B5D84FE200007FF8B5D84CA0 torch_cpu.dll!torch::autograd::Engine::thread_main [<unknown file> @ <unknown line number>]
+00007FF8B5D84C4100007FF8B5D84BC0 torch_cpu.dll!torch::autograd::Engine::thread_init [<unknown file> @ <unknown line number>]
+00007FF8EDDF08F700007FF8EDDC9F80 torch_python.dll!THPShortStorage_New [<unknown file> @ <unknown line number>]
+00007FF8B5D7BF1400007FF8B5D7B780 torch_cpu.dll!torch::autograd::Engine::get_base_engine [<unknown file> @ <unknown line number>]
+00007FF9276B10B200007FF9276B0F70 ucrtbase.dll!beginthreadex [<unknown file> @ <unknown line number>]
+00007FF928E27C2400007FF928E27C10 KERNEL32.DLL!BaseThreadInitThunk [<unknown file> @ <unknown line number>]
+00007FF929A4D4D100007FF929A4D4B0 ntdll.dll!RtlUserThreadStart [<unknown file> @ <unknown line number>]
+
+
+
+
+Traceback (most recent call last):
+  File "Documents\PerformanceMidi\performanceRNN.py", line 550, in <module>
+    train_and_show(lstm, num_epochs=500, max_data_len=2048, epoch_loss_cb=write_data_epoch)
+  File "Documents\PerformanceMidi\performanceRNN.py", line 495, in train_and_show
+    train_losses, test_losses = train(
+  File "Documents\PerformanceMidi\performanceRNN.py", line 451, in train
+    loss.backward()
+  File "C:\ProgramData\Miniconda3\lib\site-packages\torch\tensor.py", line 185, in backward
+    torch.autograd.backward(self, gradient, retain_graph, create_graph)
+  File "C:\ProgramData\Miniconda3\lib\site-packages\torch\autograd\__init__.py", line 125, in backward
+    Variable._execution_engine.run_backward(
+RuntimeError: cuDNN error: CUDNN_STATUS_EXECUTION_FAILED
+Exception raised from _cudnn_rnn_backward_input at ..\aten\src\ATen\native\cudnn\RNN.cpp:923 (most recent call first):
+00007FF8EE3275A200007FF8EE327540 c10.dll!c10::Error::Error [<unknown file> @ <unknown line number>]
+00007FF8BC4F4F3600007FF8BC4F4E80 torch_cuda.dll!at::native::Descriptor<cudnnRNNStruct,&cudnnCreateRNNDescriptor,&cudnnDestroyRNNDescriptor>::Descriptor<cudnnRNNStruct,&cudnnCreateRNNDescriptor,&cudnnDestroyRNNDescriptor> [<unknown file> @ <unknown line number>]
+00007FF8BC50BDBB00007FF8BC509770 torch_cuda.dll!at::native::_cudnn_rnn_backward [<unknown file> @ <unknown line number>]
+00007FF8BC509CD000007FF8BC509770 torch_cuda.dll!at::native::_cudnn_rnn_backward [<unknown file> @ <unknown line number>]
+00007FF8BC56284800007FF8BC51E0A0 torch_cuda.dll!at::native::set_storage_cuda_ [<unknown file> @ <unknown line number>]
+00007FF8BC57107D00007FF8BC51E0A0 torch_cuda.dll!at::native::set_storage_cuda_ [<unknown file> @ <unknown line number>]
+00007FF8B45EBBF100007FF8B455D9D0 torch_cpu.dll!at::native::mkldnn_sigmoid_ [<unknown file> @ <unknown line number>]
+00007FF8B463B9DA00007FF8B4638FA0 torch_cpu.dll!at::bucketize_out [<unknown file> @ <unknown line number>]
+00007FF8B4622ECA00007FF8B4622D40 torch_cpu.dll!at::_cudnn_rnn_backward [<unknown file> @ <unknown line number>]
+00007FF8B592088900007FF8B58DE010 torch_cpu.dll!torch::autograd::GraphRoot::apply [<unknown file> @ <unknown line number>]
+00007FF8B592D12D00007FF8B58DE010 torch_cpu.dll!torch::autograd::GraphRoot::apply [<unknown file> @ <unknown line number>]
+00007FF8B45EBBF100007FF8B455D9D0 torch_cpu.dll!at::native::mkldnn_sigmoid_ [<unknown file> @ <unknown line number>]
+00007FF8B463B9DA00007FF8B4638FA0 torch_cpu.dll!at::bucketize_out [<unknown file> @ <unknown line number>]
+00007FF8B4622ECA00007FF8B4622D40 torch_cpu.dll!at::_cudnn_rnn_backward [<unknown file> @ <unknown line number>]
+00007FF8B582C12D00007FF8B582BAF0 torch_cpu.dll!torch::autograd::generated::CudnnRnnBackward::apply [<unknown file> @ <unknown line number>]
+00007FF8B5817E9100007FF8B5817B50 torch_cpu.dll!torch::autograd::Node::operator() [<unknown file> @ <unknown line number>]
+00007FF8B5D7F9BA00007FF8B5D7F300 torch_cpu.dll!torch::autograd::Engine::add_thread_pool_task [<unknown file> @ <unknown line number>]
+00007FF8B5D803AD00007FF8B5D7FFD0 torch_cpu.dll!torch::autograd::Engine::evaluate_function [<unknown file> @ <unknown line number>]
+00007FF8B5D84FE200007FF8B5D84CA0 torch_cpu.dll!torch::autograd::Engine::thread_main [<unknown file> @ <unknown line number>]
+00007FF8B5D84C4100007FF8B5D84BC0 torch_cpu.dll!torch::autograd::Engine::thread_init [<unknown file> @ <unknown line number>]
+00007FF8ED1408F700007FF8ED119F80 torch_python.dll!THPShortStorage_New [<unknown file> @ <unknown line number>]
+00007FF8B5D7BF1400007FF8B5D7B780 torch_cpu.dll!torch::autograd::Engine::get_base_engine [<unknown file> @ <unknown line number>]
+00007FF9276B10B200007FF9276B0F70 ucrtbase.dll!beginthreadex [<unknown file> @ <unknown line number>]
+00007FF928E27C2400007FF928E27C10 KERNEL32.DLL!BaseThreadInitThunk [<unknown file> @ <unknown line number>]
+00007FF929A4D4D100007FF929A4D4B0 ntdll.dll!RtlUserThreadStart [<unknown file> @ <unknown line number>]
+
+
+
+Traceback (most recent call last):
+  File "Documents\PerformanceMidi\performanceRNN.py", line 550, in <module>
+    train_and_show(lstm, num_epochs=500, max_data_len=2048, epoch_loss_cb=write_data_epoch)
+  File "Documents\PerformanceMidi\performanceRNN.py", line 495, in train_and_show
+    train_losses, test_losses = train(
+  File "Documents\PerformanceMidi\performanceRNN.py", line 451, in train
+    loss.backward()
+  File "C:\ProgramData\Miniconda3\lib\site-packages\torch\tensor.py", line 185, in backward
+    torch.autograd.backward(self, gradient, retain_graph, create_graph)
+  File "C:\ProgramData\Miniconda3\lib\site-packages\torch\autograd\__init__.py", line 125, in backward
+    Variable._execution_engine.run_backward(
+RuntimeError: CUDA error: CUBLAS_STATUS_INTERNAL_ERROR when calling `cublasSgemm( handle, opa, opb, m, n, k, &alpha, a, lda, b, ldb, &beta, c, ldc)`
+Exception raised from gemm at ..\aten\src\ATen\cuda\CUDABlas.cpp:165 (most recent call first):
+00007FFAFE7C75A200007FFAFE7C7540 c10.dll!c10::Error::Error [<unknown file> @ <unknown line number>]
+00007FFADB4C34E600007FFADB4C24B0 torch_cuda.dll!at::native::sparse_mask_cuda [<unknown file> @ <unknown line number>]
+00007FFADA9CCA9700007FFADA9CB990 torch_cuda.dll!at::native::lerp_cuda_tensor_out [<unknown file> @ <unknown line number>]
+00007FFADA9CE4D200007FFADA9CDF60 torch_cuda.dll!at::native::addmm_out_cuda [<unknown file> @ <unknown line number>]
+00007FFADA9CF64300007FFADA9CF560 torch_cuda.dll!at::native::mm_cuda [<unknown file> @ <unknown line number>]
+00007FFADB531B0F00007FFADB4CE0A0 torch_cuda.dll!at::native::set_storage_cuda_ [<unknown file> @ <unknown line number>]
+00007FFADB521B2200007FFADB4CE0A0 torch_cuda.dll!at::native::set_storage_cuda_ [<unknown file> @ <unknown line number>]
+00007FFAD35ED94900007FFAD35E8FA0 torch_cpu.dll!at::bucketize_out [<unknown file> @ <unknown line number>]
+00007FFAD362057700007FFAD3620520 torch_cpu.dll!at::mm [<unknown file> @ <unknown line number>]
+00007FFAD497EC7900007FFAD488E010 torch_cpu.dll!torch::autograd::GraphRoot::apply [<unknown file> @ <unknown line number>]
+00007FFAD313715700007FFAD3136290 torch_cpu.dll!at::indexing::TensorIndex::boolean [<unknown file> @ <unknown line number>]
+00007FFAD35ED94900007FFAD35E8FA0 torch_cpu.dll!at::bucketize_out [<unknown file> @ <unknown line number>]
+00007FFAD370210700007FFAD37020B0 torch_cpu.dll!at::Tensor::mm [<unknown file> @ <unknown line number>]
+00007FFAD481B96900007FFAD481A760 torch_cpu.dll!torch::autograd::profiler::Event::kind [<unknown file> @ <unknown line number>]
+00007FFAD47F1CF000007FFAD47F1B30 torch_cpu.dll!torch::autograd::generated::MmBackward::apply [<unknown file> @ <unknown line number>]
+00007FFAD47C7E9100007FFAD47C7B50 torch_cpu.dll!torch::autograd::Node::operator() [<unknown file> @ <unknown line number>]
+00007FFAD4D2F9BA00007FFAD4D2F300 torch_cpu.dll!torch::autograd::Engine::add_thread_pool_task [<unknown file> @ <unknown line number>]
+00007FFAD4D303AD00007FFAD4D2FFD0 torch_cpu.dll!torch::autograd::Engine::evaluate_function [<unknown file> @ <unknown line number>]
+00007FFAD4D34FE200007FFAD4D34CA0 torch_cpu.dll!torch::autograd::Engine::thread_main [<unknown file> @ <unknown line number>]
+00007FFAD4D34C4100007FFAD4D34BC0 torch_cpu.dll!torch::autograd::Engine::thread_init [<unknown file> @ <unknown line number>]
+00007FFA9B8F08F700007FFA9B8C9F80 torch_python.dll!THPShortStorage_New [<unknown file> @ <unknown line number>]
+00007FFAD4D2BF1400007FFAD4D2B780 torch_cpu.dll!torch::autograd::Engine::get_base_engine [<unknown file> @ <unknown line number>]
+00007FFB362610B200007FFB36260F70 ucrtbase.dll!beginthreadex [<unknown file> @ <unknown line number>]
+00007FFB379A7C2400007FFB379A7C10 KERNEL32.DLL!BaseThreadInitThunk [<unknown file> @ <unknown line number>]
+00007FFB3928D4D100007FFB3928D4B0 ntdll.dll!RtlUserThreadStart [<unknown file> @ <unknown line number>]
+
+
+
+Traceback (most recent call last):
+  File "Documents\PerformanceMidi\performanceRNN.py", line 550, in <module>
+    train_and_show(lstm, num_epochs=500, max_data_len=2048, epoch_loss_cb=write_data_epoch)
+  File "Documents\PerformanceMidi\performanceRNN.py", line 495, in train_and_show
+    train_losses, test_losses = train(
+  File "Documents\PerformanceMidi\performanceRNN.py", line 451, in train
+    loss.backward()
+  File "C:\ProgramData\Miniconda3\lib\site-packages\torch\tensor.py", line 185, in backward
+    torch.autograd.backward(self, gradient, retain_graph, create_graph)
+  File "C:\ProgramData\Miniconda3\lib\site-packages\torch\autograd\__init__.py", line 125, in backward
+    Variable._execution_engine.run_backward(
+RuntimeError: cuDNN error: CUDNN_STATUS_EXECUTION_FAILED
+Exception raised from _cudnn_rnn_backward_input at ..\aten\src\ATen\native\cudnn\RNN.cpp:923 (most recent call first):
+00007FFAFE6275A200007FFAFE627540 c10.dll!c10::Error::Error [<unknown file> @ <unknown line number>]
+00007FFADB514F3600007FFADB514E80 torch_cuda.dll!at::native::Descriptor<cudnnRNNStruct,&cudnnCreateRNNDescriptor,&cudnnDestroyRNNDescriptor>::Descriptor<cudnnRNNStruct,&cudnnCreateRNNDescriptor,&cudnnDestroyRNNDescriptor> [<unknown file> @ <unknown line number>]
+00007FFADB52BDBB00007FFADB529770 torch_cuda.dll!at::native::_cudnn_rnn_backward [<unknown file> @ <unknown line number>]
+00007FFADB529CD000007FFADB529770 torch_cuda.dll!at::native::_cudnn_rnn_backward [<unknown file> @ <unknown line number>]
+00007FFADB58284800007FFADB53E0A0 torch_cuda.dll!at::native::set_storage_cuda_ [<unknown file> @ <unknown line number>]
+00007FFADB59107D00007FFADB53E0A0 torch_cuda.dll!at::native::set_storage_cuda_ [<unknown file> @ <unknown line number>]
+00007FFAD33FBBF100007FFAD336D9D0 torch_cpu.dll!at::native::mkldnn_sigmoid_ [<unknown file> @ <unknown line number>]
+00007FFAD344B9DA00007FFAD3448FA0 torch_cpu.dll!at::bucketize_out [<unknown file> @ <unknown line number>]
+00007FFAD3432ECA00007FFAD3432D40 torch_cpu.dll!at::_cudnn_rnn_backward [<unknown file> @ <unknown line number>]
+00007FFAD473088900007FFAD46EE010 torch_cpu.dll!torch::autograd::GraphRoot::apply [<unknown file> @ <unknown line number>]
+00007FFAD473D12D00007FFAD46EE010 torch_cpu.dll!torch::autograd::GraphRoot::apply [<unknown file> @ <unknown line number>]
+00007FFAD33FBBF100007FFAD336D9D0 torch_cpu.dll!at::native::mkldnn_sigmoid_ [<unknown file> @ <unknown line number>]
+00007FFAD344B9DA00007FFAD3448FA0 torch_cpu.dll!at::bucketize_out [<unknown file> @ <unknown line number>]
+00007FFAD3432ECA00007FFAD3432D40 torch_cpu.dll!at::_cudnn_rnn_backward [<unknown file> @ <unknown line number>]
+00007FFAD463C12D00007FFAD463BAF0 torch_cpu.dll!torch::autograd::generated::CudnnRnnBackward::apply [<unknown file> @ <unknown line number>]
+00007FFAD4627E9100007FFAD4627B50 torch_cpu.dll!torch::autograd::Node::operator() [<unknown file> @ <unknown line number>]
+00007FFAD4B8F9BA00007FFAD4B8F300 torch_cpu.dll!torch::autograd::Engine::add_thread_pool_task [<unknown file> @ <unknown line number>]
+00007FFAD4B903AD00007FFAD4B8FFD0 torch_cpu.dll!torch::autograd::Engine::evaluate_function [<unknown file> @ <unknown line number>]
+00007FFAD4B94FE200007FFAD4B94CA0 torch_cpu.dll!torch::autograd::Engine::thread_main [<unknown file> @ <unknown line number>]
+00007FFAD4B94C4100007FFAD4B94BC0 torch_cpu.dll!torch::autograd::Engine::thread_init [<unknown file> @ <unknown line number>]
+00007FFA9B7408F700007FFA9B719F80 torch_python.dll!THPShortStorage_New [<unknown file> @ <unknown line number>]
+00007FFAD4B8BF1400007FFAD4B8B780 torch_cpu.dll!torch::autograd::Engine::get_base_engine [<unknown file> @ <unknown line number>]
+00007FFB362610B200007FFB36260F70 ucrtbase.dll!beginthreadex [<unknown file> @ <unknown line number>]
+00007FFB379A7C2400007FFB379A7C10 KERNEL32.DLL!BaseThreadInitThunk [<unknown file> @ <unknown line number>]
+00007FFB3928D4D100007FFB3928D4B0 ntdll.dll!RtlUserThreadStart [<unknown file> @ <unknown line number>]
+
+
+
+
+Caught runtime error:
+CUDA error: CUBLAS_STATUS_INTERNAL_ERROR when calling `cublasSgemm( handle, opa, opb, m, n, k, &alpha, a, lda, b, ldb, &beta, c, ldc)`
+Exception raised from gemm at ..\aten\src\ATen\cuda\CUDABlas.cpp:165 (most recent call first):
+00007FFB0EB475A200007FFB0EB47540 c10.dll!c10::Error::Error [<unknown file> @ <unknown line number>]
+00007FFADB4C34E600007FFADB4C24B0 torch_cuda.dll!at::native::sparse_mask_cuda [<unknown file> @ <unknown line number>]
+00007FFADA9CCA9700007FFADA9CB990 torch_cuda.dll!at::native::lerp_cuda_tensor_out [<unknown file> @ <unknown line number>]
+00007FFADA9CE4D200007FFADA9CDF60 torch_cuda.dll!at::native::addmm_out_cuda [<unknown file> @ <unknown line number>]
+00007FFADA9CF64300007FFADA9CF560 torch_cuda.dll!at::native::mm_cuda [<unknown file> @ <unknown line number>]
+00007FFADB531B0F00007FFADB4CE0A0 torch_cuda.dll!at::native::set_storage_cuda_ [<unknown file> @ <unknown line number>]
+00007FFADB521B2200007FFADB4CE0A0 torch_cuda.dll!at::native::set_storage_cuda_ [<unknown file> @ <unknown line number>]
+00007FFAD35ED94900007FFAD35E8FA0 torch_cpu.dll!at::bucketize_out [<unknown file> @ <unknown line number>]
+00007FFAD362057700007FFAD3620520 torch_cpu.dll!at::mm [<unknown file> @ <unknown line number>]
+00007FFAD497EC7900007FFAD488E010 torch_cpu.dll!torch::autograd::GraphRoot::apply [<unknown file> @ <unknown line number>]
+00007FFAD313715700007FFAD3136290 torch_cpu.dll!at::indexing::TensorIndex::boolean [<unknown file> @ <unknown line number>]
+00007FFAD35ED94900007FFAD35E8FA0 torch_cpu.dll!at::bucketize_out [<unknown file> @ <unknown line number>]
+00007FFAD370210700007FFAD37020B0 torch_cpu.dll!at::Tensor::mm [<unknown file> @ <unknown line number>]
+00007FFAD481B96900007FFAD481A760 torch_cpu.dll!torch::autograd::profiler::Event::kind [<unknown file> @ <unknown line number>]
+00007FFAD47F1CF000007FFAD47F1B30 torch_cpu.dll!torch::autograd::generated::MmBackward::apply [<unknown file> @ <unknown line number>]
+00007FFAD47C7E9100007FFAD47C7B50 torch_cpu.dll!torch::autograd::Node::operator() [<unknown file> @ <unknown line number>]
+00007FFAD4D2F9BA00007FFAD4D2F300 torch_cpu.dll!torch::autograd::Engine::add_thread_pool_task [<unknown file> @ <unknown line number>]
+00007FFAD4D303AD00007FFAD4D2FFD0 torch_cpu.dll!torch::autograd::Engine::evaluate_function [<unknown file> @ <unknown line number>]
+00007FFAD4D34FE200007FFAD4D34CA0 torch_cpu.dll!torch::autograd::Engine::thread_main [<unknown file> @ <unknown line number>]
+00007FFAD4D34C4100007FFAD4D34BC0 torch_cpu.dll!torch::autograd::Engine::thread_init [<unknown file> @ <unknown line number>]
+00007FFA9B7308F700007FFA9B709F80 torch_python.dll!THPShortStorage_New [<unknown file> @ <unknown line number>]
+00007FFAD4D2BF1400007FFAD4D2B780 torch_cpu.dll!torch::autograd::Engine::get_base_engine [<unknown file> @ <unknown line number>]
+00007FFB362610B200007FFB36260F70 ucrtbase.dll!beginthreadex [<unknown file> @ <unknown line number>]
+00007FFB379A7C2400007FFB379A7C10 KERNEL32.DLL!BaseThreadInitThunk [<unknown file> @ <unknown line number>]
+00007FFB3928D4D100007FFB3928D4B0 ntdll.dll!RtlUserThreadStart [<unknown file> @ <unknown line number>]
+
+restarting epoch
+train: Traceback (most recent call last):
+  File "Documents\PerformanceMidi\performanceRNN.py", line 591, in <module>
+    train_and_show(lstm, num_epochs=500, max_data_len=2048, epoch_loss_cb=write_data_epoch)
+  File "Documents\PerformanceMidi\performanceRNN.py", line 528, in train_and_show
+    train_losses, test_losses = train(
+  File "Documents\PerformanceMidi\performanceRNN.py", line 458, in train
+    epoch_losses = torch.zeros(len(dataloader.dataset) // dataloader.batch_size + 1).to('cuda')
+RuntimeError: CUDA error: unspecified launch failure
+
+
+
+Caught runtime error:
+CUDA error: CUBLAS_STATUS_INTERNAL_ERROR when calling `cublasSgemm( handle, opa, opb, m, n, k, &alpha, a, lda, b, ldb, &beta, c, ldc)`
+Exception raised from gemm at ..\aten\src\ATen\cuda\CUDABlas.cpp:165 (most recent call first):
+00007FFB0EB475A200007FFB0EB47540 c10.dll!c10::Error::Error [<unknown file> @ <unknown line number>]
+00007FFADB4C34E600007FFADB4C24B0 torch_cuda.dll!at::native::sparse_mask_cuda [<unknown file> @ <unknown line number>]
+00007FFADA9CCA9700007FFADA9CB990 torch_cuda.dll!at::native::lerp_cuda_tensor_out [<unknown file> @ <unknown line number>]
+00007FFADA9CE4D200007FFADA9CDF60 torch_cuda.dll!at::native::addmm_out_cuda [<unknown file> @ <unknown line number>]
+00007FFADA9CF64300007FFADA9CF560 torch_cuda.dll!at::native::mm_cuda [<unknown file> @ <unknown line number>]
+00007FFADB531B0F00007FFADB4CE0A0 torch_cuda.dll!at::native::set_storage_cuda_ [<unknown file> @ <unknown line number>]
+00007FFADB521B2200007FFADB4CE0A0 torch_cuda.dll!at::native::set_storage_cuda_ [<unknown file> @ <unknown line number>]
+00007FFAD33DD94900007FFAD33D8FA0 torch_cpu.dll!at::bucketize_out [<unknown file> @ <unknown line number>]
+00007FFAD341057700007FFAD3410520 torch_cpu.dll!at::mm [<unknown file> @ <unknown line number>]
+00007FFAD476EC7900007FFAD467E010 torch_cpu.dll!torch::autograd::GraphRoot::apply [<unknown file> @ <unknown line number>]
+00007FFAD2F2715700007FFAD2F26290 torch_cpu.dll!at::indexing::TensorIndex::boolean [<unknown file> @ <unknown line number>]
+00007FFAD33DD94900007FFAD33D8FA0 torch_cpu.dll!at::bucketize_out [<unknown file> @ <unknown line number>]
+00007FFAD34F210700007FFAD34F20B0 torch_cpu.dll!at::Tensor::mm [<unknown file> @ <unknown line number>]
+00007FFAD460B96900007FFAD460A760 torch_cpu.dll!torch::autograd::profiler::Event::kind [<unknown file> @ <unknown line number>]
+00007FFAD45E1CF000007FFAD45E1B30 torch_cpu.dll!torch::autograd::generated::MmBackward::apply [<unknown file> @ <unknown line number>]
+00007FFAD45B7E9100007FFAD45B7B50 torch_cpu.dll!torch::autograd::Node::operator() [<unknown file> @ <unknown line number>]
+00007FFAD4B1F9BA00007FFAD4B1F300 torch_cpu.dll!torch::autograd::Engine::add_thread_pool_task [<unknown file> @ <unknown line number>]
+00007FFAD4B203AD00007FFAD4B1FFD0 torch_cpu.dll!torch::autograd::Engine::evaluate_function [<unknown file> @ <unknown line number>]
+00007FFAD4B24FE200007FFAD4B24CA0 torch_cpu.dll!torch::autograd::Engine::thread_main [<unknown file> @ <unknown line number>]
+00007FFAD4B24C4100007FFAD4B24BC0 torch_cpu.dll!torch::autograd::Engine::thread_init [<unknown file> @ <unknown line number>]
+00007FFA9B8108F700007FFA9B7E9F80 torch_python.dll!THPShortStorage_New [<unknown file> @ <unknown line number>]
+00007FFAD4B1BF1400007FFAD4B1B780 torch_cpu.dll!torch::autograd::Engine::get_base_engine [<unknown file> @ <unknown line number>]
+00007FFB362610B200007FFB36260F70 ucrtbase.dll!beginthreadex [<unknown file> @ <unknown line number>]
+00007FFB379A7C2400007FFB379A7C10 KERNEL32.DLL!BaseThreadInitThunk [<unknown file> @ <unknown line number>]
+00007FFB3928D4D100007FFB3928D4B0 ntdll.dll!RtlUserThreadStart [<unknown file> @ <unknown line number>]
+
+restarting epoch
+train: Traceback (most recent call last):
+  File "Documents\PerformanceMidi\performanceRNN.py", line 601, in <module>
+    train_and_show(lstm, num_epochs=500, max_data_len=2048, epoch_loss_cb=write_data_epoch)
+  File "Documents\PerformanceMidi\performanceRNN.py", line 526, in train_and_show
+    train_losses, test_losses = train(
+  File "Documents\PerformanceMidi\performanceRNN.py", line 456, in train
+    epoch_losses = torch.zeros(len(dataloader.dataset) // dataloader.batch_size + 1).to('cuda')
+RuntimeError: CUDA error: unspecified launch failure

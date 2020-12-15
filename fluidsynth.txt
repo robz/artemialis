@@ -1,0 +1,1 @@
+"C:\Program Files\fluidsynth-x64\bin\fluidsynth.exe" -F "Documents\PerformanceMidi\performance_rnn-iter2-zeros.mid.wav" -r 16000 -i -n -T wav "C:\Program Files\fluidsynth-x64\fonts\FluidR3_GM.sf2" "Documents\PerformanceMidi\performance_rnn-iter2-zeros.mid"
