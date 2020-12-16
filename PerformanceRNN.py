@@ -9,9 +9,15 @@ from MidiIndexUtils import NUM_CHANNELS
 ####################################################################
 
 class PerformanceRNN(torch.nn.Module):
-  def __init__(self, channels, hidden_size, num_layers):
+  def __init__(self, channels, hidden_size, num_layers, dropout=0):
     super(PerformanceRNN, self).__init__()
-    self.lstm = torch.nn.LSTM(input_size=channels, hidden_size=hidden_size, num_layers=3, batch_first=True)
+    self.lstm = torch.nn.LSTM(
+      input_size=channels,
+      hidden_size=hidden_size,
+      num_layers=3,
+      batch_first=True,
+      dropout=dropout
+    )
     self.linear = torch.nn.Linear(in_features=hidden_size, out_features=channels)
     self.hidden_size = hidden_size
 
