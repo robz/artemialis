@@ -39,9 +39,18 @@ class CausalConvLayer(torch.nn.Module):
     x = F.pad(x, (self.padding, 0)) if use_padding else x
     return self.forward_unpadded(x)
 
-
 class Wavenet(torch.nn.Module):
-  def __init__(self, input_channels, hidden_channels, num_layers, num_stacks, kernel_size, dilation_rate, device="cuda"):
+  def __init__(
+    self, 
+    input_channels,
+    output_channels,
+    hidden_channels,
+    num_layers,
+    num_stacks,
+    kernel_size,
+    dilation_rate,
+    device="cuda",
+  ):
     super(Wavenet, self).__init__()
 
     self.input_to_hidden_conv = torch.nn.Conv1d(
@@ -68,7 +77,7 @@ class Wavenet(torch.nn.Module):
 
     self.conv2 = torch.nn.Conv1d(
       in_channels=hidden_channels,
-      out_channels=input_channels,
+      out_channels=output_channels,
       kernel_size=1
     )
 
@@ -77,12 +86,13 @@ class Wavenet(torch.nn.Module):
 
     self.device = device
     self.hidden_channels = hidden_channels
-    self.onehot = torch.eye(input_channels, device=device)
+    self.onehot_input = torch.eye(input_channels, device=device)
+    self.onehot_output = torch.eye(output_channels, device=device)
     self.mulawEncode = torchaudio.transforms.MuLawEncoding()
     self.mulawDecode = torchaudio.transforms.MuLawDecoding()
 
-  # x is [batch, seq, input_channels]
-  # returns [batch, input_channels, seq]
+  # x is [batch, seq, channels]
+  # returns [batch, channels, seq]
   # using left padding causes the output to have the same length as the input
   def forward(self, x, use_padding=True):
     x = x.transpose(1, 2) # transpose to [batch, channels, seq]
@@ -102,14 +112,14 @@ class Wavenet(torch.nn.Module):
       ypred = self.forward(x, use_padding=False)
       sample = torch.argmax(ypred[0, :, -1])
       outputs[i] = sample
-      sample = self.onehot[sample][None, :, None]      
+      sample = self.onehot_output[sample][None, :, None]      
       x = torch.cat([x[:, :, 1:], sample], axis=2)
 
     return outputs
 
-  # x is [batch, input_channels, seq]
+  # x is [batch, channels, seq]
   # https://arxiv.org/abs/1611.09482
-  def fast_forward_steps(self, x, steps, greedy=True, alpha=1.0):
+  def fast_forward_steps(self, x, steps, greedy=True, alpha=1.0, condition=None):
     queues = [torch.zeros((1, self.hidden_channels, 0), device=self.device) for _ in self.layers]
     outputs = torch.zeros((steps), device=self.device)
 
@@ -128,30 +138,33 @@ class Wavenet(torch.nn.Module):
       y = y[0, :, -1]
       sample = torch.argmax(y) if greedy else torch.distributions.Categorical(torch.softmax(alpha * y, 0)).sample()
       outputs[j] = sample
-      x = self.onehot[sample][None, :, None]
+      x = self.onehot_output[sample][None, :, None]
+      if condition is not None:
+        x = condition(x)
 
     return outputs
 
+  # x is [seq]
   def forward_encode_nomulaw(self, x):
-    x = self.onehot[x].T[None, :, :]
+    x = self.onehot_input[x][None, :, :]
     output = self.forward(x, use_padding=True)
     output = torch.argmax(output.squeeze(), 0).to('cpu')
     return output
 
   def forward_encode(self, x):
-    x = self.onehot[self.mulawEncode(x)].T[None, :, :]
+    x = self.onehot_input[self.mulawEncode(x)].T[None, :, :]
     output = self.forward(x, use_padding=True)
     output = self.mulawDecode(torch.argmax(output.squeeze(), 0)).to('cpu')
     return output
 
-  def fast_forward_steps_encode_nomulaw(self, x, steps, greedy=True, alpha=1.0):
-    x = self.onehot[x].T[None, :, :]
-    output = self.fast_forward_steps(x, steps, greedy, alpha)
+  def fast_forward_steps_encode_nomulaw(self, x, steps, greedy=True, alpha=1.0, condition=None):
+    x = self.onehot_input[x].T[None, :, :]
+    output = self.fast_forward_steps(x, steps, greedy, alpha, condition)
     output = output.to('cpu')
     return output
 
   def fast_forward_steps_encode(self, x, steps, greedy=True):
-    x = self.onehot[self.mulawEncode(x)].T[None, :, :]
+    x = self.onehot_input[self.mulawEncode(x)].T[None, :, :]
     output = self.fast_forward_steps(x, steps, greedy)
     output = self.mulawDecode(output).to('cpu')
     return output
