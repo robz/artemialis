@@ -174,7 +174,7 @@ def idxsToMidi(idxs, verbose=False):
         continue
       if track.events[-1].type != 'DeltaTime':
         track.events.append(midi.DeltaTime(track, time=0))
-      track.events.append(makeNote(track, pitch, 1))
+      track.events.append(makeNote(track, pitch, 0))
       notes_on.remove(pitch)
 
     elif (128 + 128) <= idx < (128 + 128 + 100): # time-shift
