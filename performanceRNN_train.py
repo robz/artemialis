@@ -14,7 +14,7 @@ epochWriter = EpochWriter(
   model=lstm,
   name_prefix='performance_rnn',
   get_seq_for_errors=lambda lstm: lstm.forward_step(1000, prime=prime),
-  iteration=3,
+  iteration=4,
 )
 #epochWriter.get_latest_model(iteration_override=0)
 

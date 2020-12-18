@@ -1,6 +1,6 @@
 import torch
 from torch.utils.tensorboard import SummaryWriter
-import os, re, platform
+import os, re, platform, math
 
 from MidiIndexUtils import writeMidi, idxsToMidi
 from GPUUsageUtils import printm
@@ -51,14 +51,17 @@ class EpochWriter:
       F"{self.model_dir}/{self.name_prefix}-iter{iteration}-{epoch}.pt"
     ))
 
-  def write_data_epoch(self, phase, loss, all_losses):
-    self.writer.add_scalar(phase + '_epoch_loss', loss, self.epoch)
+  def write_data_epoch(self, phase, loss_avg, all_losses):
+    self.writer.add_scalar(phase + '_epoch_loss', loss_avg, self.epoch)
+    print(self.epoch, phase, loss_avg) 
 
     start = self.epoch * len(all_losses)
     for i, loss in enumerate(all_losses):
       self.writer.add_scalar(phase + '_loss', loss, i + start)
-    
-    print(self.epoch, phase, loss) 
+
+    if math.isnan(loss_avg):
+      print('loss is nan, quitting!')
+      exit()
 
     if phase == 'train':
       self.model.eval()
