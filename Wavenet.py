@@ -41,28 +41,34 @@ class CausalConvLayer(torch.nn.Module):
 
 
 class Wavenet(torch.nn.Module):
-  def __init__(self, channels, num_layers, num_stacks, kernel_size, dilation_rate, device="cuda"):
+  def __init__(self, input_channels, hidden_channels, num_layers, num_stacks, kernel_size, dilation_rate, device="cuda"):
     super(Wavenet, self).__init__()
+
+    self.input_to_hidden_conv = torch.nn.Conv1d(
+      in_channels=input_channels,
+      out_channels=hidden_channels,
+      kernel_size=1
+    )
 
     layers = []
     for _ in range(num_stacks):
       for layer in range(num_layers):
         layers.append(CausalConvLayer(
-          channels=channels, 
+          channels=hidden_channels, 
           dilation=dilation_rate ** layer,
           kernel_size=kernel_size,
         ))
     self.layers = torch.nn.ModuleList(layers)
 
     self.conv1 = torch.nn.Conv1d(
-      in_channels=channels,
-      out_channels=channels,
+      in_channels=hidden_channels,
+      out_channels=hidden_channels,
       kernel_size=1
     )
 
     self.conv2 = torch.nn.Conv1d(
-      in_channels=channels,
-      out_channels=channels,
+      in_channels=hidden_channels,
+      out_channels=input_channels,
       kernel_size=1
     )
 
@@ -70,16 +76,17 @@ class Wavenet(torch.nn.Module):
     self.receptive_field = num_stacks * (dilation_rate ** num_layers - 1) * (kernel_size - 1) // (dilation_rate - 1) + 1
 
     self.device = device
-    self.channels = channels
-    self.onehot = torch.eye(channels, device=device)
+    self.hidden_channels = hidden_channels
+    self.onehot = torch.eye(input_channels, device=device)
     self.mulawEncode = torchaudio.transforms.MuLawEncoding()
     self.mulawDecode = torchaudio.transforms.MuLawDecoding()
 
-  # x is [batch, seq, channels]
-  # returns [batch, channels, seq]
+  # x is [batch, seq, input_channels]
+  # returns [batch, input_channels, seq]
   # using left padding causes the output to have the same length as the input
   def forward(self, x, use_padding=True):
     x = x.transpose(1, 2) # transpose to [batch, channels, seq]
+    x = self.input_to_hidden_conv(x)
     skip_sum = torch.zeros_like(x)
     for layer in self.layers:
       x, skip = layer(x, use_padding=use_padding)
@@ -100,15 +107,16 @@ class Wavenet(torch.nn.Module):
 
     return outputs
 
-  # x is [batch, channels, seq]
+  # x is [batch, input_channels, seq]
   # https://arxiv.org/abs/1611.09482
   def fast_forward_steps(self, x, steps, greedy=True, alpha=1.0):
-    queues = [torch.zeros((1, self.channels, 0), device=self.device) for _ in self.layers]
+    queues = [torch.zeros((1, self.hidden_channels, 0), device=self.device) for _ in self.layers]
     outputs = torch.zeros((steps), device=self.device)
 
     # the first step uses the full receptive field
     # subsequent steps use only the end of the previous output
     for j in range(steps):
+      x = self.input_to_hidden_conv(x)
       skip_sum = 0.0
       for i, layer in enumerate(self.layers):
         x = torch.cat([queues[i], x], axis=2)
