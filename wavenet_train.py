@@ -1,9 +1,7 @@
 import torch
-import time, os, re
-from torch.utils.tensorboard import SummaryWriter
 
 from MidiIndexUtils import NUM_CHANNELS
-from MaestroMidiDataset import get_dataloader, preprocessAndSaveToDisk
+from MaestroMidiDatasetWithConditioning import MaestroMidiDatasetWithConditioning
 from Wavenet import Wavenet
 from Train import train
 from EpochWriter import EpochWriter
@@ -61,7 +59,7 @@ epochWriter = EpochWriter(
 train_losses, test_losses = train(
   model=wavenet,
   dataloaders={
-    phase: get_dataloader(phase, max_data_len=2048) 
+    phase: MaestroMidiDatasetWithConditioning.get_dataloader(phase, max_data_len=2048)
     for phase in ['train', 'eval']
   },
   num_epochs=500,

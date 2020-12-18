@@ -1,6 +1,6 @@
 import torch
 
-from MaestroMidiDataset import get_dataloader, preprocessAndSaveToDisk
+from MaestroMidiDataset import MaestroMidiDataset
 from PerformanceRNN import PerformanceRNN
 from Train import train
 from EpochWriter import EpochWriter
@@ -21,7 +21,7 @@ epochWriter = EpochWriter(
 train(
   model=lstm,
   dataloaders={
-    phase: get_dataloader(phase, max_data_len=2048) 
+    phase: MaestroMidiDataset.get_dataloader(phase, max_data_len=2048)
     for phase in ['train', 'eval']
   },
   num_epochs=1000,

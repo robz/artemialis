@@ -1,16 +1,19 @@
 import torch
+import platform
 import matplotlib.pyplot as plt
 
 from PerformanceRNN import PerformanceRNN
 from MidiIndexUtils import writeMidi, idxsToMidi, NUM_CHANNELS
-from MaestroMidiDataset import MaestroDataset
+from MaestroMidiDataset import MaestroMidiDataset
 
-model_path = 'Documents/PerformanceMidi/models/performance_rnn-iter4-129.pt'
-midi_path = 'Documents/PerformanceMidi/music/performance_rnn-iter4-129.pt.midi'
-#model_path = 'Documents/PerformanceMidi/final_models/performance_rnn-iter2-186.pt'
-#midi_path = 'Documents/PerformanceMidi/music/performance_rnn-iter2-186.pt.midi'
-#model_path = 'Documents/PerformanceMidi/models/performance_rnn-iter9-596.pt'
-#midi_path = 'Documents/PerformanceMidi/music/performance_rnn-iter9-596.pt.midi'
+top_dir = '' if platform.system() == 'Linux' else 'Documents/PerformanceMidi'
+
+model_path = top_dir + 'models/performance_rnn-iter4-221.pt'
+midi_path = top_dir + 'music/performance_rnn-iter4-221.pt.midi'
+#model_path = top_dir + 'final_models/performance_rnn-iter2-186.pt'
+#midi_path = top_dir + 'music/performance_rnn-iter2-186.pt.midi'
+#model_path = top_dir + 'models/performance_rnn-iter9-596.pt'
+#midi_path = top_dir + 'music/performance_rnn-iter9-596.pt.midi'
 
 print('creating and loading model...')
 lstm = PerformanceRNN(channels=NUM_CHANNELS, hidden_size=1024, num_layers=3, dropout=0.5).to('cuda')
@@ -22,7 +25,7 @@ print('predicting...')
 #prime = torch.zeros(1, 1, 388)
 #prime[0, 0, 355] = 1
 
-dataset = MaestroDataset('train')
+dataset = MaestroMidiDataset('train')
 dataset.fillCache()
 prime = dataset.cache[dataset.df['midi_filename'][0]][:100].long()
 onehot = torch.eye(NUM_CHANNELS)
