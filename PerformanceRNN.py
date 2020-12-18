@@ -9,16 +9,16 @@ from MidiIndexUtils import NUM_CHANNELS
 ####################################################################
 
 class PerformanceRNN(torch.nn.Module):
-  def __init__(self, channels, hidden_size, num_layers, dropout=0):
+  def __init__(self, input_channels, output_channels, hidden_size, num_layers, dropout=0):
     super(PerformanceRNN, self).__init__()
     self.lstm = torch.nn.LSTM(
-      input_size=channels,
+      input_size=input_channels,
       hidden_size=hidden_size,
       num_layers=3,
       batch_first=True,
       dropout=dropout
     )
-    self.linear = torch.nn.Linear(in_features=hidden_size, out_features=channels)
+    self.linear = torch.nn.Linear(in_features=hidden_size, out_features=output_channels)
     self.hidden_size = hidden_size
 
   # x is [batch, seq, channels]
@@ -37,7 +37,7 @@ class PerformanceRNN(torch.nn.Module):
     return y, hidden
 
   # prime is [1, seq, channels]
-  def forward_step(self, steps, prime=torch.zeros(1, 1, 388), greedy=True, alpha=1.0):
+  def forward_step(self, steps, prime=torch.zeros(1, 1, 388), greedy=True, alpha=1.0, condition=None):
     device = next(self.parameters()).device
     onehot = torch.eye(NUM_CHANNELS).to(device)
     result = torch.zeros(steps).to(device)
@@ -48,7 +48,10 @@ class PerformanceRNN(torch.nn.Module):
     result[0] = element
 
     for i in range(steps - 1):
-      input = onehot[element][None, None, :]
+      input = onehot[element]
+      if condition is not None:
+        input = condition(input)
+      input = input[None, None, :]
       output, hidden = self.forward_hidden(input, hidden)
       element = torch.argmax(output[0, -1], 0) if greedy else torch.distributions.Categorical(torch.softmax(alpha * output[0, -1], 0)).sample()
       result[i + 1] = element

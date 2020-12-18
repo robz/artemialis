@@ -19,7 +19,7 @@ def train(
   loss_cb=None,
   epoch_loss_cb=None
 ):
-  print('hi?')
+  print('starting training!')
   optimizer = torch.optim.Adam(params=model.parameters(), lr=lr)
   lossfn = torch.nn.CrossEntropyLoss()
 

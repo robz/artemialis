@@ -7,7 +7,7 @@ from EpochWriter import EpochWriter
 from MidiIndexUtils import NUM_CHANNELS
 
 
-lstm = PerformanceRNN(channels=NUM_CHANNELS, hidden_size=1024, num_layers=3, dropout=.5).to('cuda')
+lstm = PerformanceRNN(input_channels=NUM_CHANNELS, output_channels=NUM_CHANNELS, hidden_size=1024, num_layers=3, dropout=.5).to('cuda')
 
 prime = torch.zeros(1, 1, 388).to('cuda')
 epochWriter = EpochWriter(

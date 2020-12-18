@@ -44,7 +44,7 @@ class MaestroMidiDatasetWithConditioning(MaestroMidiDataset):
       x = self.cache[filename]
       notes_on_sparse = get_notes_on_sparse(filename, x.to('cpu'))
       os.makedirs(directory + '-tensors-noteons/' + os.path.dirname(filename), exist_ok=True)
-      torch.save(nonzeros, directory + '-tensors-noteons/' + filename + '.pt')
+      torch.save(notes_on_sparse, directory + '-tensors-noteons/' + filename + '.pt')
       if i % 10 == 0:
         print(i, end=' ')
 
@@ -78,6 +78,29 @@ class MaestroMidiDatasetWithConditioning(MaestroMidiDataset):
 
     # concat it to the end of the one-hot input events
     return {**item, 'input': torch.cat([input, notes_on], axis=1)}
+
+
+transition_matrix = torch.cat([
+  torch.diag(torch.ones(128)),
+  torch.diag(torch.empty(128).fill_(-1)),
+  torch.zeros(128, 388-256)
+], axis=1).to('cuda')
+
+def get_condition(prime=None):
+  # compute current conditioning from prime
+  if prime is not None:
+    current_notes_on = [prime[0, -1, -128:]]
+  else:
+    current_notes_on = [torch.zeros(128, device='cuda')]
+
+  def condition(event):
+    # update current conditioning based on latest event
+    current_notes_on[0] = torch.clamp(current_notes_on[0] + torch.matmul(transition_matrix, event), 0, 1)
+    # concat it to the input and return it
+    input = torch.cat([event, current_notes_on[0]])
+    return input
+
+  return condition
 
 
 if __name__ == "__main__":

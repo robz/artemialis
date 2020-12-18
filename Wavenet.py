@@ -138,9 +138,10 @@ class Wavenet(torch.nn.Module):
       y = y[0, :, -1]
       sample = torch.argmax(y) if greedy else torch.distributions.Categorical(torch.softmax(alpha * y, 0)).sample()
       outputs[j] = sample
-      x = self.onehot_output[sample][None, :, None]
+      x = self.onehot_output[sample]
       if condition is not None:
         x = condition(x)
+      x = x[None, :, None]
 
     return outputs
 

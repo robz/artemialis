@@ -16,7 +16,7 @@ midi_path = top_dir + 'music/performance_rnn-iter4-221.pt.midi'
 #midi_path = top_dir + 'music/performance_rnn-iter9-596.pt.midi'
 
 print('creating and loading model...')
-lstm = PerformanceRNN(channels=NUM_CHANNELS, hidden_size=1024, num_layers=3, dropout=0.5).to('cuda')
+lstm = PerformanceRNN(input_channels=NUM_CHANNELS, output_channels=NUM_CHANNELS, hidden_size=1024, num_layers=3, dropout=0.5).to('cuda')
 lstm.load_state_dict(torch.load(model_path))
 lstm.eval()
 
