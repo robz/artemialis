@@ -34,7 +34,7 @@ condition, inputs = get_condition(prime_condition, record_inputs=False)
 #temp = torch.zeros(NUM_CHANNELS + 128, device='cuda')
 #condition = lambda event: temp
 
-y = wavenet.fast_forward_steps(prime, 1000, greedy=False, condition=condition)
+y = wavenet.slow_forward_steps(prime.transpose(1, 2), 10000, greedy=False, condition=condition)
 
 y = y.to('cpu').long().detach().numpy()
 

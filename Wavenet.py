@@ -106,15 +106,22 @@ class Wavenet(torch.nn.Module):
     y = self.conv2(F.relu(y))
     return y
 
-  def slow_forward_steps(self, x, steps):
+  # x is [batch, seq, channels]
+  def slow_forward_steps(self, x, steps, greedy=True, condition=None):
     outputs = torch.zeros((steps), device=self.device)
+    printm()
 
     for i in range(steps):
       ypred = self.forward(x, use_padding=False)
-      sample = torch.argmax(ypred[0, :, -1])
+      ypred = ypred[0, :, -1]
+      sample = torch.argmax(ypred) if greedy else torch.distributions.Categorical(torch.softmax(ypred, 0)).sample()
       outputs[i] = sample
-      sample = self.onehot_output[sample][None, :, None]      
-      x = torch.cat([x[:, :, 1:], sample], axis=2)
+      sample = self.onehot_output[sample]
+      if condition is not None:
+        sample = condition(sample)
+      sample = sample[None, None, :]      
+      x = torch.cat([x[:, 1:, :], sample], axis=1)
+    printm()
 
     return outputs
 
@@ -124,15 +131,19 @@ class Wavenet(torch.nn.Module):
     queues = [torch.zeros((1, self.hidden_channels, 0), device=self.device) for _ in self.layers]
     outputs = torch.zeros((steps), device=self.device)
 
+    prev = [torch.cuda.memory_allocated('cuda')]
+    def print_mem(s):
+        alloc = torch.cuda.memory_allocated('cuda')
+        print(s, alloc, alloc - prev[0])
+        prev[0] = alloc
+
     # the first step uses the full receptive field
     # subsequent steps use only the end of the previous output
     for j in range(steps):
-      #print('step', j)
-      #printm()
-      #print([q.shape for q in queues])
       x = self.input_to_hidden_conv(x)
       skip_sum = 0.0
       for i, layer in enumerate(self.layers):
+        # TODO: there is a memory leak here
         x = torch.cat([queues[i], x], axis=2)
         queues[i] = x[:, :, -layer.dilation * (self.kernel_size - 1):]
         x, skip = layer.forward_unpadded(x)
@@ -146,6 +157,8 @@ class Wavenet(torch.nn.Module):
       if condition is not None:
         x = condition(x)
       x = x[None, :, None]
+
+    printm()
 
     return outputs
 
