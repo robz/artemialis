@@ -1,6 +1,7 @@
 import torch
 import torch.nn.functional as F
 import torchaudio
+from GPUUsageUtils import printm
 
 class CausalConvLayer(torch.nn.Module):
   def __init__(self, channels, dilation, kernel_size):
@@ -126,6 +127,9 @@ class Wavenet(torch.nn.Module):
     # the first step uses the full receptive field
     # subsequent steps use only the end of the previous output
     for j in range(steps):
+      #print('step', j)
+      #printm()
+      #print([q.shape for q in queues])
       x = self.input_to_hidden_conv(x)
       skip_sum = 0.0
       for i, layer in enumerate(self.layers):

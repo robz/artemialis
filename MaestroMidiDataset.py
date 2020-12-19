@@ -96,6 +96,15 @@ class MaestroMidiDataset(torch.utils.data.Dataset):
   def __len__(self):
     return self.manual_len if self.manual_len is not None else len(self.df)
 
+  # Like getitem, but without data augmentation and always clipping from the beginning of a track
+  def getFullItem(self, i, seq_len):
+    filename = self.df['midi_filename'][i]
+    x = self.cache[filename][:seq_len].long()
+    return {
+      'idxs': x,
+      'input': self.onehot[x],
+    }
+
   def __getitem__(self, i):
     filename = self.df['midi_filename'][i]
 

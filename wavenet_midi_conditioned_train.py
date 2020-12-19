@@ -9,9 +9,9 @@ from EpochWriter import EpochWriter
 wavenet = Wavenet(
   input_channels=NUM_CHANNELS + 128,
   output_channels=NUM_CHANNELS,
-  hidden_channels=64,
-  num_layers=9,
-  num_stacks=4,
+  hidden_channels=128,
+  num_layers=10,
+  num_stacks=2,
   kernel_size=2,
   dilation_rate=2,
 ).to('cuda')
@@ -22,7 +22,7 @@ epochWriter = EpochWriter(
   model=wavenet,
   name_prefix='performance_wavenet',
   get_seq_for_errors=lambda wavenet: wavenet.fast_forward_steps(prime, 1000, condition=get_condition()),
-  iteration=14
+  iteration=15
 )
 #epochWriter.get_latest_model()
 #epochWriter.get_model(6, 12)

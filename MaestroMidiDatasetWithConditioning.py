@@ -58,6 +58,21 @@ class MaestroMidiDatasetWithConditioning(MaestroMidiDataset):
       self.sparse_conditioning_cache[filename] = notes_on_sparse.to('cuda')
     printm()
 
+  def getFullItem(self, i, seq_len):
+    item = super().getFullItem(i, seq_len)
+    idxs, input = [item[k] for k in ['idxs', 'input']]
+    seq_len = len(idxs)
+
+    filename = self.df['midi_filename'][i]
+    notes_on_sparse = self.sparse_conditioning_cache[filename]
+    clip_indices = notes_on_sparse[:, 0] < seq_len
+    notes_on_sparse_clip = notes_on_sparse[clip_indices].long()
+
+    notes_on = torch.zeros(seq_len, 128, device='cuda')
+    notes_on[notes_on_sparse_clip[:, 0], notes_on_sparse_clip[:, 1]] = 1
+
+    return {**item, 'input': torch.cat([input, notes_on], axis=1)}
+
   def __getitem__(self, i):
     item = super().__getitem__(i)
     input, start, pitch_transposition = [item[k] for k in ['input', 'start', 'pitch_transposition']]
@@ -86,21 +101,29 @@ transition_matrix = torch.cat([
   torch.zeros(128, 388-256)
 ], axis=1).to('cuda')
 
-def get_condition(prime=None):
+def get_condition(prime_condition=None, record_inputs=True):
   # compute current conditioning from prime
-  if prime is not None:
-    current_notes_on = [prime[0, -1, -128:]]
+  if prime_condition is not None:
+    #current_notes_on = [prime[0, -1, -128:]]
+    current_notes_on = [prime_condition]
   else:
     current_notes_on = [torch.zeros(128, device='cuda')]
+
+  if record_inputs:
+    inputs = []
+  else:
+    inputs = None
 
   def condition(event):
     # update current conditioning based on latest event
     current_notes_on[0] = torch.clamp(current_notes_on[0] + torch.matmul(transition_matrix, event), 0, 1)
+    if record_inputs:
+      inputs.append(current_notes_on[0])
     # concat it to the input and return it
     input = torch.cat([event, current_notes_on[0]])
     return input
 
-  return condition
+  return condition, inputs
 
 
 if __name__ == "__main__":

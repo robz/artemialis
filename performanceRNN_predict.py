@@ -6,7 +6,7 @@ from PerformanceRNN import PerformanceRNN
 from MidiIndexUtils import writeMidi, idxsToMidi, NUM_CHANNELS
 from MaestroMidiDataset import MaestroMidiDataset
 
-top_dir = '' if platform.system() == 'Linux' else 'Documents/PerformanceMidi'
+top_dir = '' if platform.system() == 'Linux' else 'Documents/PerformanceMidi/'
 
 model_path = top_dir + 'models/performance_rnn-iter4-221.pt'
 midi_path = top_dir + 'music/performance_rnn-iter4-221.pt.midi'

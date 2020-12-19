@@ -19,3 +19,6 @@ wavenet = Wavenet(input_channels=NUM_CHANNELS+128, output_channels=NUM_CHANNELS,
 wavenet.load_state_dict(torch.load("Documents/PerformanceMidi/models/performance_wavenet-iter14-1.pt"))
 print(wavenet.receptive_field)
 
+wavenet = Wavenet(input_channels=NUM_CHANNELS+128, output_channels=NUM_CHANNELS, hidden_channels=128, num_layers=10, num_stacks=2, kernel_size=2, dilation_rate=2, device='cpu')
+wavenet.load_state_dict(torch.load("Documents/PerformanceMidi/models/performance_wavenet-iter15-1.pt"))
+print(wavenet.receptive_field)
