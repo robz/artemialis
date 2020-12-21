@@ -121,7 +121,7 @@ def get_condition(prime=None, composers=False):
   if composers:
     transition_matrix = torch.cat([transition_matrix, torch.zeros(5, 388).to('cuda')], axis=0)
 
-def get_condition(prime_condition=None, record_inputs=True):
+def get_condition(prime_condition=None, record_inputs=False):
   # compute current conditioning from prime
   dim = 128+5 if composers else 128
   if prime_condition is not None:
