@@ -31,9 +31,16 @@ def get_notes_on_sparse(filename, idxs):
 
 class MaestroMidiDatasetWithConditioning(MaestroMidiDataset):
   # phase is train or eval
-  def __init__(self, phase, directory=MAESTRO_DIRECTORY, channels=NUM_CHANNELS, len=None, max_data_len=10000):
+  def __init__(self, phase, directory=MAESTRO_DIRECTORY, channels=NUM_CHANNELS, len=None, max_data_len=10000, composers=False):
     super().__init__(phase=phase, directory=directory, channels=channels, len=len, max_data_len=max_data_len)
     self.sparse_conditioning_cache = dict()
+    self.df['count'] = 1
+    composer_counts = self.df.groupby(by='canonical_composer').count().sort_values('count', ascending=False)['count']
+    onehot = torch.eye(5).to('cuda')
+    self.composer_conditioning = composers
+    if composers:
+      self.composer_to_condition = {key: onehot[i] for i, key in enumerate(composer_counts[0:5].keys())}
+      self.default_composer = torch.zeros(5).to('cuda')
 
   def preprocessAndSaveToDisk(self, directory=MAESTRO_DIRECTORY):
     super().preprocessAndSaveToDisk(directory=directory)
@@ -91,23 +98,36 @@ class MaestroMidiDatasetWithConditioning(MaestroMidiDataset):
     notes_on = torch.zeros(seq_len, 128, device='cuda')
     notes_on[notes_on_sparse_clip[:, 0], notes_on_sparse_clip[:, 1]] = 1
 
+    if self.composer_conditioning:
+      composer_name = self.df['canonical_composer'][i] 
+      composer = self.composer_to_condition[composer_name] if composer_name in self.composer_to_condition else self.default_composer
+      composer = composer.repeat(seq_len).view((-1, 5))
+      input = torch.cat([input, notes_on, composer], axis=1)
+    else:
+      input = torch.cat([input, notes_on], axis=1)
+
     # concat it to the end of the one-hot input events
-    return {**item, 'input': torch.cat([input, notes_on], axis=1)}
+    return {**item, 'input': input}
 
 
-transition_matrix = torch.cat([
-  torch.diag(torch.ones(128)),
-  torch.diag(torch.empty(128).fill_(-1)),
-  torch.zeros(128, 388-256)
-], axis=1).to('cuda')
+
+def get_condition(prime=None, composers=False):
+  transition_matrix = torch.cat([
+    torch.diag(torch.ones(128)),
+    torch.diag(torch.empty(128).fill_(-1)),
+    torch.zeros(128, 388-256)
+  ], axis=1).to('cuda')
+
+  if composers:
+    transition_matrix = torch.cat([transition_matrix, torch.zeros(5, 388).to('cuda')], axis=0)
 
 def get_condition(prime_condition=None, record_inputs=True):
   # compute current conditioning from prime
+  dim = 128+5 if composers else 128
   if prime_condition is not None:
-    #current_notes_on = [prime[0, -1, -128:]]
     current_notes_on = [prime_condition]
   else:
-    current_notes_on = [torch.zeros(128, device='cuda')]
+    current_notes_on = [torch.zeros(dim, device='cuda')]
 
   if record_inputs:
     inputs = []

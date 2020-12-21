@@ -39,7 +39,9 @@ class EpochWriter:
     )[0]
 
     name = F'{self.name_prefix}-iter{iteration}'
-    self.model.load_state_dict(torch.load(F"{self.model_dir}/{name}-{epoch}.pt"))
+    model_path = F"{self.model_dir}/{name}-{epoch}.pt"
+    print(F"loading model {model_path}")
+    self.model.load_state_dict(torch.load(model_path))
 
     self.epoch = 1 + int(epoch)
     iteration = iteration if iteration_override is None else iteration_override

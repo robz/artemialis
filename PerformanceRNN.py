@@ -18,6 +18,11 @@ class PerformanceRNN(torch.nn.Module):
       batch_first=True,
       dropout=dropout
     )
+    for name, param in self.lstm.named_parameters():
+      if 'bias' in name:
+         torch.nn.init.constant_(param, 0.0)
+      elif 'weight' in name:
+         torch.nn.init.xavier_normal_(param)
     self.linear = torch.nn.Linear(in_features=hidden_size, out_features=output_channels)
     self.hidden_size = hidden_size
 

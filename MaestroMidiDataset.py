@@ -124,8 +124,8 @@ class MaestroMidiDataset(torch.utils.data.Dataset):
     }
 
   @classmethod
-  def get_dataloader(Dataset, phase, len=None, max_data_len=10000):
-    dataset = Dataset(phase, len=len, max_data_len=max_data_len)
+  def get_dataloader(Dataset, phase, len=None, max_data_len=10000, **kwargs):
+    dataset = Dataset(phase, len=len, max_data_len=max_data_len, **kwargs)
     dataset.fillCache()
     return torch.utils.data.DataLoader(
       dataset, 

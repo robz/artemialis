@@ -8,26 +8,26 @@ from MidiIndexUtils import NUM_CHANNELS
 
 
 lstm = PerformanceRNN(
-  input_channels=NUM_CHANNELS + 128,
+  input_channels=NUM_CHANNELS + 128 + 5,
   output_channels=NUM_CHANNELS,
   hidden_size=1024,
   num_layers=3,
   dropout=0.5,
 ).to('cuda')
 
-prime = torch.zeros(1, 1, NUM_CHANNELS + 128).to('cuda')
+prime = torch.zeros(1, 1, NUM_CHANNELS + 128 + 5).to('cuda')
 epochWriter = EpochWriter(
   model=lstm,
   name_prefix='performance_rnn_conditioned',
-  get_seq_for_errors=lambda lstm: lstm.forward_step(1000, prime=prime, condition=get_condition()),
-  iteration=1,
+  get_seq_for_errors=lambda lstm: lstm.forward_step(1000, prime=prime, condition=get_condition(composers=True)),
+  iteration=5,
 )
-#epochWriter.get_latest_model(iteration_override=0)
+#epochWriter.get_latest_model()
 
 train(
   model=lstm,
   dataloaders={
-    phase: MaestroMidiDatasetWithConditioning.get_dataloader(phase, max_data_len=2048)
+    phase: MaestroMidiDatasetWithConditioning.get_dataloader(phase, max_data_len=2048, composers=True)
     for phase in ['train', 'eval']
   },
   num_epochs=1000,
